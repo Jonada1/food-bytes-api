@@ -13,7 +13,7 @@ import { ColorsModule } from './colors/colors.module';
     MongooseModule.forRoot('mongodb://localhost:27017/food-bytes'),
     UserModule,
     ImagesModule,
-    ColorsModule
+    ColorsModule,
   ],
   controllers: [AppController],
   providers: [AppService]
