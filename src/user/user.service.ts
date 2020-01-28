@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './interfaces/user.interface';
 import { CreateUserDto } from './dto/create-user-dto';
+import { GetUserDto } from './dto/get-user-dto';
 
 @Injectable()
 export class UserService {
@@ -13,7 +14,14 @@ export class UserService {
     return createUser.save();
   }
 
-  async getAll(): Promise<User[]> {
-    return this.toUserModel.find().exec();
+  async getAll(): Promise<GetUserDto[]> {
+    return (await this.toUserModel.find().exec()).map(mapToGetUserDto);
   }
+}
+
+function mapToGetUserDto(user: User): GetUserDto {
+  return {
+    id: user.id,
+    name: user.name
+  };
 }
