@@ -11,13 +11,16 @@ import Vibrant = require('node-vibrant');
 import { AuthGuard } from '@nestjs/passport';
 import { Palette } from 'node-vibrant/lib/color';
 import GetImageDto from '../images/dtos/get-image.dto';
-import { GetImagePaletteDto } from './dto/get-image-palette.dto';
+import { GetImagePaletteDto, GetPaletteDto } from './dto/get-image-palette.dto';
 @UseGuards(AuthGuard('jwt'))
 @Controller('colors')
 export class ColorsController {
   constructor(private readonly imageService: ImagesService) {}
   @Get(':id')
-  public async getColors(@Param('id') id: string, @Request() req) {
+  public async getColors(
+    @Param('id') id: string,
+    @Request() req
+  ): Promise<GetImagePaletteDto> {
     const userId = req.user.id;
     if (!(await this.imageService.isImageOfUser(id, userId))) {
       throw new UnauthorizedException(
@@ -31,20 +34,30 @@ export class ColorsController {
   }
 
   @Get()
-  public async getAllImageColorsForUser(@Request() req) {
+  public async getAllImageColorsForUser(
+    @Request() req
+  ): Promise<GetImagePaletteDto[]> {
     const userId = req.user.id;
-    const imagePalettes = (await this.imageService.getByUserId(userId)).map(
-      async image => orderAndMapPaletteColors(await Vibrant.from(image.url).getPalette(), image),
+    const images = await this.imageService.getByUserId(userId);
+    console.log(images);
+
+    const imagePalettes = await Promise.all(
+      images.map(async image =>
+        orderAndMapPaletteColors(
+          await Vibrant.from(image.url).getPalette(),
+          image
+        )
+      )
     );
-    return imagePalettes
+    return imagePalettes;
   }
 }
 
 function orderAndMapPaletteColors(
   palette: Palette,
   image: GetImageDto
-): GetImagePaletteDto[] {
-  return [
+): GetImagePaletteDto {
+  const palettes: GetPaletteDto[] = [
     palette.DarkMuted,
     palette.DarkVibrant,
     palette.LightMuted,
@@ -53,5 +66,9 @@ function orderAndMapPaletteColors(
     palette.Vibrant
   ]
     .sort((palette1, palette2) => palette2.population - palette1.population)
-    .map(x => ({ rgb: x.rgb, population: x.population, ...image }));
+    .map(x => ({ rgb: x.rgb, population: x.population }));
+  return {
+    ...image,
+    palettes
+  };
 }
