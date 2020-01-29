@@ -39,7 +39,6 @@ export class ColorsController {
   ): Promise<GetImagePaletteDto[]> {
     const userId = req.user.id;
     const images = await this.imageService.getByUserId(userId);
-    console.log(images);
 
     const imagePalettes = await Promise.all(
       images.map(async image =>

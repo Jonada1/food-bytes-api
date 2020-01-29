@@ -37,7 +37,6 @@ export class ImagesController {
     @Request() req,
   ): Promise<GetImageDto> {
     const user: GetUserDto = req.user;
-    console.log("User id", user.id)
     return this.imagesService.uploadImage(uploadedImageDto, user.id, file.path);
   }
 }
