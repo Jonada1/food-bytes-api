@@ -1,5 +1,9 @@
 # FoodBytes API
 
+## Requirements
+`Docker` should be installed (! Not the docker-toolbox)
+`Node` should be installed
+
 ## Installation
 
 ```bash
@@ -8,6 +12,11 @@ npm install
 
 ## Running the app
 
+### Run Docker First by runing
+Windows: `run-docker.bat`
+Mac/Linux `run-docker.sh`
+
+### Run Node.js with npm
 ```bash
 # development
 npm run start
