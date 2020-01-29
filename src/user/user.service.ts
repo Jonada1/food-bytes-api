@@ -1,13 +1,13 @@
-import { Model } from "mongoose";
-import { Injectable } from "@nestjs/common";
-import { InjectModel } from "@nestjs/mongoose";
-import { User } from "./interfaces/user.interface";
-import { CreateUserDto } from "./dtos/create-user-dto";
-import { GetUserDto } from "./dtos/get-user-dto";
+import { Model } from 'mongoose';
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { User } from './interfaces/user.interface';
+import { CreateUserDto } from './dtos/create-user-dto';
+import { GetUserDto } from './dtos/get-user-dto';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel("User") private readonly toUserModel: Model<User>) {}
+  constructor(@InjectModel('User') private readonly toUserModel: Model<User>) {}
 
   async create(createUserDto: CreateUserDto): Promise<GetUserDto> {
     const createUser = new this.toUserModel(createUserDto);
@@ -26,6 +26,6 @@ export class UserService {
 export function mapToGetUserDto(user: User): GetUserDto {
   return {
     id: user.id,
-    name: user.name
+    name: user.name,
   };
 }

@@ -4,28 +4,28 @@ import {
   Param,
   UseGuards,
   Request,
-  UnauthorizedException
-} from "@nestjs/common";
-import { ImagesService } from "../images/images.service";
-import Vibrant = require("node-vibrant");
-import { AuthGuard } from "@nestjs/passport";
-import { Palette } from "node-vibrant/lib/color";
-import GetImageDto from "../images/dtos/get-image.dto";
-import { GetImagePaletteDto, GetPaletteDto } from "./dto/get-image-palette.dto";
-@UseGuards(AuthGuard("jwt"))
-@Controller("colors")
+  UnauthorizedException,
+} from '@nestjs/common';
+import { ImagesService } from '../images/images.service';
+import Vibrant = require('node-vibrant');
+import { AuthGuard } from '@nestjs/passport';
+import { Palette } from 'node-vibrant/lib/color';
+import GetImageDto from '../images/dtos/get-image.dto';
+import { GetImagePaletteDto, GetPaletteDto } from './dto/get-image-palette.dto';
+@UseGuards(AuthGuard('jwt'))
+@Controller('colors')
 export class ColorsController {
   constructor(private readonly imageService: ImagesService) {}
-  @Get(":id")
+  @Get(':id')
   public async getColors(
-    @Param("id") id: string,
-    @Request() req
+    @Param('id') id: string,
+    @Request() req,
   ): Promise<GetImagePaletteDto> {
     const userId = req.user.id;
     if (!(await this.imageService.isImageOfUser(id, userId))) {
       throw new UnauthorizedException(
-        "unauthorized",
-        "This image doesn't belong to the user"
+        'unauthorized',
+        "This image doesn't belong to the user",
       );
     }
     const image = await this.imageService.getById(id);
@@ -35,7 +35,7 @@ export class ColorsController {
 
   @Get()
   public async getAllImageColorsForUser(
-    @Request() req
+    @Request() req,
   ): Promise<GetImagePaletteDto[]> {
     const userId = req.user.id;
     const images = await this.imageService.getByUserId(userId);
@@ -44,9 +44,9 @@ export class ColorsController {
       images.map(async image =>
         orderAndMapPaletteColors(
           await Vibrant.from(image.url).getPalette(),
-          image
-        )
-      )
+          image,
+        ),
+      ),
     );
     return imagePalettes;
   }
@@ -54,7 +54,7 @@ export class ColorsController {
 
 function orderAndMapPaletteColors(
   palette: Palette,
-  image: GetImageDto
+  image: GetImageDto,
 ): GetImagePaletteDto {
   const palettes: GetPaletteDto[] = [
     palette.DarkMuted,
@@ -62,12 +62,12 @@ function orderAndMapPaletteColors(
     palette.LightMuted,
     palette.LightVibrant,
     palette.Muted,
-    palette.Vibrant
+    palette.Vibrant,
   ]
     .sort((palette1, palette2) => palette2.population - palette1.population)
     .map(x => ({ rgb: x.rgb, population: x.population }));
   return {
     ...image,
-    palettes
+    palettes,
   };
 }
