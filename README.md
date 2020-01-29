@@ -2,6 +2,7 @@
 
 ## Requirements
 `Docker` should be installed (! Not the docker-toolbox)
+
 `Node` should be installed
 
 ## Installation
@@ -14,6 +15,7 @@ npm install
 
 ### Run Docker First by runing
 Windows: `run-docker.bat`
+
 Mac/Linux `run-docker.sh`
 
 ### Run Node.js with npm
