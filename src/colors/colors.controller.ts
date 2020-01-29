@@ -15,7 +15,9 @@ export class ColorsController {
       palette.LightVibrant,
       palette.Muted,
       palette.Vibrant
-    ].sort((palette1, palette2) => palette2.population - palette1.population);
+    ]
+      .sort((palette1, palette2) => palette2.population - palette1.population)
+      .map(x => ({ rgb: x.rgb, population: x.population }));
     return paletteOrdered;
   }
 }
