@@ -1,19 +1,15 @@
-import {
-  Controller,
-  UseInterceptors,
-  Post,
-  UploadedFile,
-  Body
-} from '@nestjs/common';
-import { ApiConsumes } from '@nestjs/swagger';
+import { Body, Controller, Post, UploadedFile, UseGuards, UseInterceptors, Request, Get } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ImagesService } from './images.service';
-import UploadImageDto from './dtos/upload-image.dto';
-import { json } from 'express';
-import GetImageDto from './dtos/get-image.dto';
-import { extname } from 'path';
+import { ApiConsumes } from '@nestjs/swagger';
 import { diskStorage } from 'multer';
+import { extname } from 'path';
+import GetImageDto from './dtos/get-image.dto';
+import UploadImageDto from './dtos/upload-image.dto';
+import { ImagesService } from './images.service';
+import { GetUserDto } from '../user/dtos/get-user-dto';
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('images')
 export class ImagesController {
   constructor(private imagesService: ImagesService) {}
@@ -37,8 +33,11 @@ export class ImagesController {
   @ApiConsumes('multipart/form-data')
   async uploadFile(
     @UploadedFile() file: any,
-    @Body() uploadedImageDto: UploadImageDto
+    @Body() uploadedImageDto: UploadImageDto,
+    @Request() req,
   ): Promise<GetImageDto> {
-    return this.imagesService.uploadImage(uploadedImageDto, file.path);
+    const user: GetUserDto = req.user;
+    console.log("User id", user.id)
+    return this.imagesService.uploadImage(uploadedImageDto, user.id, file.path);
   }
 }

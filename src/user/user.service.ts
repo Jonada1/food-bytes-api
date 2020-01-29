@@ -9,17 +9,21 @@ import { GetUserDto } from './dtos/get-user-dto';
 export class UserService {
   constructor(@InjectModel('User') private readonly toUserModel: Model<User>) {}
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
+  async create(createUserDto: CreateUserDto): Promise<GetUserDto> {
     const createUser = new this.toUserModel(createUserDto);
-    return createUser.save();
+    return mapToGetUserDto(await createUser.save());
   }
 
   async getAll(): Promise<GetUserDto[]> {
     return (await this.toUserModel.find().exec()).map(mapToGetUserDto);
   }
+
+  async findOne(id: string): Promise<GetUserDto> {
+    return mapToGetUserDto(await this.toUserModel.findOne({ id }));
+  }
 }
 
-function mapToGetUserDto(user: User): GetUserDto {
+export function mapToGetUserDto(user: User): GetUserDto {
   return {
     id: user.id,
     name: user.name
