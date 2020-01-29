@@ -1,3 +1,3 @@
 export default interface UploadImageDto {
-    text: string;
+  text: string;
 }

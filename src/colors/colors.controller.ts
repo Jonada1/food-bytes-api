@@ -5,26 +5,26 @@ import {
   UseGuards,
   Request,
   UnauthorizedException
-} from '@nestjs/common';
-import { ImagesService } from '../images/images.service';
-import Vibrant = require('node-vibrant');
-import { AuthGuard } from '@nestjs/passport';
-import { Palette } from 'node-vibrant/lib/color';
-import GetImageDto from '../images/dtos/get-image.dto';
-import { GetImagePaletteDto, GetPaletteDto } from './dto/get-image-palette.dto';
-@UseGuards(AuthGuard('jwt'))
-@Controller('colors')
+} from "@nestjs/common";
+import { ImagesService } from "../images/images.service";
+import Vibrant = require("node-vibrant");
+import { AuthGuard } from "@nestjs/passport";
+import { Palette } from "node-vibrant/lib/color";
+import GetImageDto from "../images/dtos/get-image.dto";
+import { GetImagePaletteDto, GetPaletteDto } from "./dto/get-image-palette.dto";
+@UseGuards(AuthGuard("jwt"))
+@Controller("colors")
 export class ColorsController {
   constructor(private readonly imageService: ImagesService) {}
-  @Get(':id')
+  @Get(":id")
   public async getColors(
-    @Param('id') id: string,
+    @Param("id") id: string,
     @Request() req
   ): Promise<GetImagePaletteDto> {
     const userId = req.user.id;
     if (!(await this.imageService.isImageOfUser(id, userId))) {
       throw new UnauthorizedException(
-        'unauthorized',
+        "unauthorized",
         "This image doesn't belong to the user"
       );
     }

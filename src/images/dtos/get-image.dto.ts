@@ -1,5 +1,5 @@
 export default interface GetImageDto {
-    id: string;
-    text: string;
-    url: string;
+  id: string;
+  text: string;
+  url: string;
 }
