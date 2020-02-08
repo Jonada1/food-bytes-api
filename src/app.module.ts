@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { ImagesModule } from './images/images.module';
 import { UserModule } from './user/user.module';
 import { ColorsModule } from './colors/colors.module';
+import { QuestionnaireModule } from './questionnaire/questionnaire.module';
 @Module({
   imports: [
     AuthModule,
@@ -14,6 +15,7 @@ import { ColorsModule } from './colors/colors.module';
     UserModule,
     ImagesModule,
     ColorsModule,
+    QuestionnaireModule,
   ],
   controllers: [AppController],
   providers: [AppService],

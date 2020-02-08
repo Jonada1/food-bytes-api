@@ -7,5 +7,6 @@ import { ImagesModule } from '../images/images.module';
   imports: [ImagesModule],
   providers: [ColorsService],
   controllers: [ColorsController],
+  exports: [ColorsService],
 })
 export class ColorsModule {}

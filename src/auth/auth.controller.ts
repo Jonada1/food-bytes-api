@@ -14,13 +14,13 @@ export class AuthController {
   googleLoginCallback(@Req() req, @Res() res) {
     // handles the Google OAuth2 callback
     const jwt: string = req.user.jwt;
-    if (jwt) res.redirect('http://localhost:3000/login/succes/' + jwt);
-    else res.redirect('http://localhost:3000/login/failure');
+    if (jwt) res.redirect('https://food-bytes.com/login/' + jwt);
+    else res.redirect('https://food-bytes.com/login/failure');
   }
 
-  @Get('protected')
+  @Get('isLoggedIn')
   @UseGuards(AuthGuard('jwt'))
   protectedResource() {
-    return 'JWT is working!';
+    return true;
   }
 }

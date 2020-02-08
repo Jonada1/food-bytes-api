@@ -12,10 +12,11 @@ import { AuthGuard } from '@nestjs/passport';
 import { Palette } from 'node-vibrant/lib/color';
 import GetImageDto from '../images/dtos/get-image.dto';
 import { GetImagePaletteDto, GetPaletteDto } from './dto/get-image-palette.dto';
+import { ColorsService } from './colors.service';
 @UseGuards(AuthGuard('jwt'))
 @Controller('colors')
 export class ColorsController {
-  constructor(private readonly imageService: ImagesService) {}
+  constructor(private readonly imageService: ImagesService, private readonly colorsService: ColorsService) {}
   @Get(':id')
   public async getColors(
     @Param('id') id: string,
@@ -30,7 +31,7 @@ export class ColorsController {
     }
     const image = await this.imageService.getById(id);
     const palette = await Vibrant.from(image.url).getPalette();
-    return orderAndMapPaletteColors(palette, image);
+    return this.colorsService.orderAndMapPaletteColorsWithImage(palette, image);
   }
 
   @Get()
@@ -42,7 +43,7 @@ export class ColorsController {
 
     const imagePalettes = await Promise.all(
       images.map(async image =>
-        orderAndMapPaletteColors(
+        this.colorsService.orderAndMapPaletteColorsWithImage(
           await Vibrant.from(image.url).getPalette(),
           image,
         ),
@@ -52,22 +53,4 @@ export class ColorsController {
   }
 }
 
-function orderAndMapPaletteColors(
-  palette: Palette,
-  image: GetImageDto,
-): GetImagePaletteDto {
-  const palettes: GetPaletteDto[] = [
-    palette.DarkMuted,
-    palette.DarkVibrant,
-    palette.LightMuted,
-    palette.LightVibrant,
-    palette.Muted,
-    palette.Vibrant,
-  ]
-    .sort((palette1, palette2) => palette2.population - palette1.population)
-    .map(x => ({ rgb: x.rgb, population: x.population }));
-  return {
-    ...image,
-    palettes,
-  };
-}
+

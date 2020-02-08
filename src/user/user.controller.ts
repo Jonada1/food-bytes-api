@@ -17,6 +17,11 @@ export class UserController {
     return this.userService.getAll();
   }
 
+  @Get('current')
+  async getLoggedUser(@Request() req) {
+    return req.user;
+  }
+  
   @Get('images')
   async getUserImages(@Request() req) {
     const user: GetUserDto = req.user;

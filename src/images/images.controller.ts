@@ -46,6 +46,7 @@ export class ImagesController {
     @Request() req,
   ): Promise<GetImageDto> {
     const user: GetUserDto = req.user;
-    return this.imagesService.uploadImage(uploadedImageDto, user.id, file.path);
+    const image = await this.imagesService.uploadImage(uploadedImageDto, user.id, file.path);
+    return (image);
   }
 }
