@@ -7,6 +7,7 @@ import {
   UseInterceptors,
   Request,
   Get,
+  Req,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -48,5 +49,11 @@ export class ImagesController {
     const user: GetUserDto = req.user;
     const image = await this.imagesService.uploadImage(uploadedImageDto, user.id, file.path);
     return (image);
+  }
+
+  @Get('without-questionnaire')
+  async getImagesWithoutQuestionnaires(@Req() req) {
+    const user = req.user;
+    return this.imagesService.getImagesWithoutQuestionnaires(user.id);
   }
 }

@@ -1,14 +1,15 @@
 import { Module } from '@nestjs/common';
-import { ImagesService } from './images.service';
-import { ImagesController } from './images.controller';
 import { MongooseModule } from '@nestjs/mongoose';
-import { ImageSchema } from './schemas/image.schema';
-import { ColorsModule } from '../colors/colors.module';
 import { ColorsService } from '../colors/colors.service';
+import { QuestionnaireModule } from '../questionnaire/questionnaire.module';
+import { ImagesController } from './images.controller';
+import { ImagesService } from './images.service';
+import { ImageSchema } from './schemas/image.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: 'Image', schema: ImageSchema }]),
+    QuestionnaireModule
   ],
   providers: [ImagesService, ColorsService],
   controllers: [ImagesController],

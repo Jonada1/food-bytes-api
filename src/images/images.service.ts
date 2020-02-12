@@ -6,11 +6,13 @@ import { Model } from 'mongoose';
 import { Image } from './interfaces/image.interface';
 import { ColorsService } from '../colors/colors.service';
 import Vibrant = require('node-vibrant');
+import { QuestionnaireService } from '../questionnaire/questionnaire.service';
 @Injectable()
 export class ImagesService {
   constructor(
     @InjectModel('Image') private readonly toImageModel: Model<Image>,
     private readonly colorService: ColorsService,
+    private readonly questionnaireService: QuestionnaireService,
   ) {}
 
   public async uploadImage(
@@ -31,6 +33,13 @@ export class ImagesService {
       colors,
     }).save();
     return toGetImageDto(uploadedImage);
+  }
+
+  public async getImagesWithoutQuestionnaires(userId: string) {
+    const imagesWithQuestionnaires = (await this.questionnaireService.getUserQuestionnaires(userId)).map(x => x.imageId);
+    const imagesOfUser = await this.getByUserId(userId);
+    console.log(imagesOfUser);
+    return imagesOfUser.filter(image => !imagesWithQuestionnaires.includes(image.id));
   }
 
   public async isImageOfUser(imageId: string, userId: string) {
