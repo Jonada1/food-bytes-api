@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { PostQuestionnaireDto } from './dtos/post-questionnaire.dto';
 import { Questionnaire } from './questionnaire.model';
 import { Model } from 'mongoose';
@@ -22,8 +22,12 @@ export class QuestionnaireService {
     }
 
     async addQuestionnaireAnswer(postQuestionnaireDto: PostQuestionnaireDto, userId: string) {
-        const questionnaire = await (await this.toQuestionnaireModel.create({...postQuestionnaireDto, userId})).save();
-        return toGetQuestionnaireDto(questionnaire);
+        if(await this.toQuestionnaireModel.exists({userId, imageId: postQuestionnaireDto.imageId})) {
+            const questionnaire = await (await this.toQuestionnaireModel.create({...postQuestionnaireDto, userId})).save();
+            return toGetQuestionnaireDto(questionnaire);
+        } else {
+            throw new BadRequestException('The answers to this questionnaire already exist')
+        }
     }
 }
 
