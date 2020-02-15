@@ -25,7 +25,7 @@ export class AuthService {
     try {
       //   You can add some registration logic here,
       //   to register the user using their thirdPartyId (in this case their googleId)
-      let user: GetUserDto = null; //await this.usersService.findOne(profile.id);
+      let user: GetUserDto = await this.usersService.findOne(profile.id);
 
       if (!user) {
         user = await this.usersService.create({
