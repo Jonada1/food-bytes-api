@@ -22,7 +22,7 @@ export class QuestionnaireService {
     }
 
     async addQuestionnaireAnswer(postQuestionnaireDto: PostQuestionnaireDto, userId: string) {
-        if(await this.toQuestionnaireModel.exists({userId, imageId: postQuestionnaireDto.imageId})) {
+        if(!await this.toQuestionnaireModel.exists({userId, imageId: postQuestionnaireDto.imageId})) {
             const questionnaire = await (await this.toQuestionnaireModel.create({...postQuestionnaireDto, userId})).save();
             return toGetQuestionnaireDto(questionnaire);
         } else {
