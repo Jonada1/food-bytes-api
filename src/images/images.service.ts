@@ -38,7 +38,6 @@ export class ImagesService {
   public async getImagesWithoutQuestionnaires(userId: string) {
     const imagesWithQuestionnaires = (await this.questionnaireService.getUserQuestionnaires(userId)).map(x => x.imageId);
     const imagesOfUser = await this.getByUserId(userId);
-    console.log(imagesOfUser);
     return imagesOfUser.filter(image => !imagesWithQuestionnaires.includes(image.id));
   }
 
