@@ -58,6 +58,7 @@ export class ImagesService {
         _id: {
           $in: imagesWithQuestionnaires.map(x => Types.ObjectId(x.imageId)),
         },
+        userId,
       })
     ).map(toGetImageDto);
     return images.map(image => ({
