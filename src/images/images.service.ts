@@ -23,7 +23,7 @@ export class ImagesService {
     if (!userId) {
       throw new Error('User Id was not provided');
     }
-    
+
     const palette = await Vibrant.from(url).getPalette();
     const colors = this.colorService.orderAndMapPaletteColors(palette);
     const uploadedImage = await new this.toImageModel({
@@ -36,9 +36,13 @@ export class ImagesService {
   }
 
   public async getImagesWithoutQuestionnaires(userId: string) {
-    const imagesWithQuestionnaires = (await this.questionnaireService.getUserQuestionnaires(userId)).map(x => x.imageId);
+    const imagesWithQuestionnaires = (
+      await this.questionnaireService.getUserQuestionnaires(userId)
+    ).map(x => x.imageId);
     const imagesOfUser = await this.getByUserId(userId);
-    return imagesOfUser.filter(image => !imagesWithQuestionnaires.includes(image.id.toString()));
+    return imagesOfUser.filter(
+      image => !imagesWithQuestionnaires.includes(image.id.toString()),
+    );
   }
 
   public async isImageOfUser(imageId: string, userId: string) {
@@ -49,8 +53,16 @@ export class ImagesService {
     return toGetImageDto(await this.toImageModel.findById(id));
   }
 
-  public async getByUserId(userId: string) {
-    return (await this.toImageModel.find({ userId })).map(toGetImageDto);
+  public async getByUserId(userId: string, page?: number) {
+    if (!page) {
+      return (await this.toImageModel.find({ userId })).map(toGetImageDto);
+    }
+
+    return (await this.toImageModel
+      .find({ userId })
+      .limit(5)
+      .skip(5 * page))
+      .map(toGetImageDto);
   }
 
   public async getAll(): Promise<GetImageDto[]> {

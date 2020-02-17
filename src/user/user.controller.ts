@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards, Request } from '@nestjs/common';
+import { Controller, Get, UseGuards, Request, Query } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AuthGuard } from '@nestjs/passport';
 import { ImagesService } from '../images/images.service';
@@ -23,8 +23,8 @@ export class UserController {
   }
   
   @Get('images')
-  async getUserImages(@Request() req) {
+  async getUserImages(@Request() req, @Query('page') page: number) {
     const user: GetUserDto = req.user;
-    return this.imagesService.getByUserId(user.id);
+    return this.imagesService.getByUserId(user.id, page);
   }
 }
