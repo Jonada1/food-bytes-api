@@ -70,6 +70,6 @@ export class ImagesController {
       throw new BadRequestException('You cannot delete another users image');
     }
     await this.imagesService.deleteImage(imageId);
-    res.status(HttpStatus.NO_CONTENT);
+    res.status(HttpStatus.NO_CONTENT).send();
   }
 }
