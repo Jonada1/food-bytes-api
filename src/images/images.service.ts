@@ -62,7 +62,7 @@ export class ImagesService {
     ).map(toGetImageDto);
     return images.map(image => ({
       ...image,
-      questionnaire: imagesWithQuestionnaires.find(x => x.imageId === image.id),
+      questionnaire: imagesWithQuestionnaires.find(x => x.imageId === image.id.toString()),
     }));
   }
 
