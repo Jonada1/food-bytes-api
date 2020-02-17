@@ -53,8 +53,12 @@ export class ImagesController {
     @Request() req,
   ): Promise<GetImageDto> {
     const user: GetUserDto = req.user;
-    const image = await this.imagesService.uploadImage(uploadedImageDto, user.id, file.path);
-    return (image);
+    const image = await this.imagesService.uploadImage(
+      uploadedImageDto,
+      user.id,
+      file.path,
+    );
+    return image;
   }
 
   @Get('without-questionnaire')
@@ -62,11 +66,21 @@ export class ImagesController {
     const user = req.user;
     return this.imagesService.getImagesWithoutQuestionnaires(user.id);
   }
+  
+  @Get('with-questionnaire')
+  async getImagesWithQuestionnaires(@Req() req) {
+    const user = req.user;
+    return this.imagesService.getImagesWithQuestionnaires(user.id);
+  }
 
   @Delete(':imageId')
-  async delete(@Req() req, @Res() res: Response, @Param('imageId') imageId: string) {
+  async delete(
+    @Req() req,
+    @Res() res: Response,
+    @Param('imageId') imageId: string,
+  ) {
     const user = req.user;
-    if(!await this.imagesService.isImageOfUser(imageId, user.id)) {
+    if (!(await this.imagesService.isImageOfUser(imageId, user.id))) {
       throw new BadRequestException('You cannot delete another users image');
     }
     await this.imagesService.deleteImage(imageId);

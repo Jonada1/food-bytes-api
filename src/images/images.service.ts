@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import GetImageDto from './dtos/get-image.dto';
 import UploadImageDto from './dtos/upload-image.dto';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Image } from './interfaces/image.interface';
 import { ColorsService } from '../colors/colors.service';
 import Vibrant = require('node-vibrant');
@@ -16,7 +16,7 @@ export class ImagesService {
   ) {}
 
   async deleteImage(imageId: string) {
-    await this.toImageModel.deleteOne({_id: imageId});
+    await this.toImageModel.deleteOne({ _id: imageId });
     await this.questionnaireService.deleteQuestionnaire(imageId);
   }
   public async uploadImage(
@@ -47,6 +47,23 @@ export class ImagesService {
     return imagesOfUser.filter(
       image => !imagesWithQuestionnaires.includes(image.id.toString()),
     );
+  }
+
+  async getImagesWithQuestionnaires(userId: string) {
+    const imagesWithQuestionnaires = await this.questionnaireService.getUserQuestionnaires(
+      userId,
+    );
+    const images = (
+      await this.toImageModel.find({
+        _id: {
+          $in: [imagesWithQuestionnaires.map(x => Types.ObjectId(x.imageId))],
+        },
+      })
+    ).map(toGetImageDto);
+    return images.map(image => ({
+      ...image,
+      questionnaire: imagesWithQuestionnaires.find(x => x.imageId === image.id),
+    }));
   }
 
   public async isImageOfUser(imageId: string, userId: string) {
