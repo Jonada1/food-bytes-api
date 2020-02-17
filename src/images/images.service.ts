@@ -53,17 +53,19 @@ export class ImagesService {
     const imagesWithQuestionnaires = await this.questionnaireService.getUserQuestionnaires(
       userId,
     );
-    
-    const images = (await this.getByUserId(userId)).filter(image =>
-      imagesWithQuestionnaires.findIndex(x => x.imageId === image.id) !== -1,
-    );
-
-    return images.map(image => ({
-      ...image,
-      questionnaire: imagesWithQuestionnaires.find(
-        x => x.imageId === image.id.toString(),
-      ),
-    }));
+    const imagesOfUser = await this.getByUserId(userId);
+    return imagesOfUser
+      .filter(image =>
+        imagesWithQuestionnaires
+          .map(x => x.imageId)
+          .includes(image.id.toString()),
+      )
+      .map(image => ({
+        ...image,
+        questionnaire: imagesWithQuestionnaires.find(
+          x => x.imageId === image.id.toString(),
+        ),
+      }));
   }
 
   public async isImageOfUser(imageId: string, userId: string) {
