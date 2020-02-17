@@ -17,6 +17,7 @@ export class ImagesService {
 
   async deleteImage(imageId: string) {
     await this.toImageModel.deleteOne({_id: imageId});
+    await this.questionnaireService.deleteQuestionnaire(imageId);
   }
   public async uploadImage(
     uploadImageDto: UploadImageDto,
