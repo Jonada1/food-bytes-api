@@ -8,16 +8,22 @@ import {
   Request,
   Get,
   Req,
+  Delete,
+  Param,
+  BadRequestException,
+  Res,
+  HttpStatus,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiConsumes } from '@nestjs/swagger';
+import { ApiConsumes, ApiNoContentResponse } from '@nestjs/swagger';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import GetImageDto from './dtos/get-image.dto';
 import UploadImageDto from './dtos/upload-image.dto';
 import { ImagesService } from './images.service';
 import { GetUserDto } from '../user/dtos/get-user-dto';
+import { Response } from 'express';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('images')
@@ -55,5 +61,15 @@ export class ImagesController {
   async getImagesWithoutQuestionnaires(@Req() req) {
     const user = req.user;
     return this.imagesService.getImagesWithoutQuestionnaires(user.id);
+  }
+
+  @Delete(':imageId')
+  async delete(@Req() req, @Res() res: Response, @Param('imageId') imageId: string) {
+    const user = req.user;
+    if(!await this.imagesService.isImageOfUser(imageId, user.id)) {
+      throw new BadRequestException('You cannot delete another users image');
+    }
+    await this.imagesService.deleteImage(imageId);
+    res.status(HttpStatus.NO_CONTENT);
   }
 }

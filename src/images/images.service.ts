@@ -15,6 +15,9 @@ export class ImagesService {
     private readonly questionnaireService: QuestionnaireService,
   ) {}
 
+  async deleteImage(imageId: string) {
+    await this.toImageModel.deleteOne({_id: imageId});
+  }
   public async uploadImage(
     uploadImageDto: UploadImageDto,
     userId: string,
@@ -58,11 +61,12 @@ export class ImagesService {
       return (await this.toImageModel.find({ userId })).map(toGetImageDto);
     }
 
-    return (await this.toImageModel
-      .find({ userId })
-      .limit(5)
-      .skip(5 * page))
-      .map(toGetImageDto);
+    return (
+      await this.toImageModel
+        .find({ userId })
+        .limit(5)
+        .skip(5 * page)
+    ).map(toGetImageDto);
   }
 
   public async getAll(): Promise<GetImageDto[]> {
