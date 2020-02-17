@@ -56,7 +56,7 @@ export class ImagesService {
     const images = (
       await this.toImageModel.find({
         _id: {
-          $in: [imagesWithQuestionnaires.map(x => Types.ObjectId(x.imageId))],
+          $in: [imagesWithQuestionnaires.map(x => Types.ObjectId(x.imageId.toString()))],
         },
       })
     ).map(toGetImageDto);
