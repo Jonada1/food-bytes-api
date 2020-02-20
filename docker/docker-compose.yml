@@ -7,3 +7,6 @@ services:
       - MONGODB_DATABASE="food-bytes"
     ports:
       - 27017:27017
+    
+    volume:
+      - ./mongo-volume:/data/db
