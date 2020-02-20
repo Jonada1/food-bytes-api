@@ -85,7 +85,7 @@ export class ImagesService {
       await this.toImageModel
         .find({ userId })
         .limit(5)
-        .skip(5 * page)
+        .skip(5 * (page - 1))
     ).map(toGetImageDto);
   }
 
