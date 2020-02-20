@@ -8,5 +8,5 @@ services:
     ports:
       - 27017:27017
     
-    volume:
+    volumes:
       - ./mongo-volume:/data/db
