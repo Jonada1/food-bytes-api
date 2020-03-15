@@ -35,6 +35,7 @@ export class ImagesService {
       userId,
       url,
       colors,
+      date: new Date()
     }).save();
     return toGetImageDto(uploadedImage);
   }
@@ -100,5 +101,6 @@ export function toGetImageDto(image: Image): GetImageDto {
     text: image.text,
     url: image.url,
     colors: image.colors,
+    date: image.date,
   };
 }

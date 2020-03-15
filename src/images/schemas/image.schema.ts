@@ -5,4 +5,5 @@ export const ImageSchema = new mongoose.Schema({
   url: String,
   userId: String,
   colors: Array,
+  date: Date,
 });

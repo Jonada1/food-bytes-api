@@ -6,4 +6,5 @@ export interface Image extends Document {
   url: string;
   userId: string;
   colors: GetPaletteDto[],
+  date: Date,
 }

@@ -5,4 +5,5 @@ export default interface GetImageDto {
   text: string;
   url: string;
   colors: GetPaletteDto[],
+  date: Date,
 }
