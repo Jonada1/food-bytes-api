@@ -19,6 +19,26 @@ export class ImagesService {
     await this.toImageModel.deleteOne({ _id: imageId });
     await this.questionnaireService.deleteQuestionnaire(imageId);
   }
+
+  public async getByDay(date: Date, userId: string) {
+    const start = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    const end = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+      23,
+      59,
+      59,
+    );
+    return (
+      await this.toImageModel
+        .find({ userId, date })
+        .where('date')
+        .gte(start)
+        .lte(end)
+    ).map(toGetImageDto);
+  }
+
   public async uploadImage(
     uploadImageDto: UploadImageDto,
     userId: string,
@@ -35,7 +55,7 @@ export class ImagesService {
       userId,
       url,
       colors,
-      date: new Date()
+      date: new Date(),
     }).save();
     return toGetImageDto(uploadedImage);
   }

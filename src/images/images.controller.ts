@@ -73,6 +73,12 @@ export class ImagesController {
     return this.imagesService.getImagesWithQuestionnaires(user.id);
   }
 
+  @Get('by-date/:date')
+  async getImagesByDate(@Req() req, @Param('date') date: Date) {
+    const user = req.user;
+    return this.imagesService.getByDay(new Date(date),user.id)
+  }
+
   @Delete(':imageId')
   async delete(
     @Req() req,
