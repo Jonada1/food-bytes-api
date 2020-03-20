@@ -20,22 +20,25 @@ export class ImagesService {
     await this.questionnaireService.deleteQuestionnaire(imageId);
   }
 
-  public async getMeals(id: string) {
-    const mealsPerDay = await this.toImageModel.aggregate([
-      {$match: {userId: id}},
-      {
-        $group: {
-          _id: {
-            month: { $month: "$date" },
-            day: { $dayOfMonth: "$date" },
-            year: { $year: "$date" }
-          },
-          count: { $sum: 1 }
+  public async getMealsPerDay(id: string) {
+    return (await this.toImageModel.find({ userId: id })).reduce(
+      (acc: any, { date }) => {
+        if(!date) {
+          return acc;
         }
-      }
-    ]);
-    console.log(mealsPerDay);
-    return mealsPerDay;
+        const dateWithoutHours = new Date(
+          date.getFullYear(),
+          date.getMonth(),
+          date.getDate(),
+        );
+        if (!acc[dateWithoutHours.toISOString()]) {
+          acc[dateWithoutHours.toISOString()] = [];
+        }
+        acc[dateWithoutHours.toISOString()].push(date);
+        return acc;
+      },
+      {},
+    );
   }
 
   public async getByDay(date: Date, userId: string) {

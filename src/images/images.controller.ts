@@ -82,7 +82,7 @@ export class ImagesController {
   @Get('meals')
   async getMealsPerDate(@Req() req) {
     const user = req.user;
-    return this.imagesService.getMeals(user.id);
+    return this.imagesService.getMealsPerDay(user.id);
   }
 
   @Delete(':imageId')
