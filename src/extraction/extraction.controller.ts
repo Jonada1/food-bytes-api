@@ -5,7 +5,7 @@ import { QuestionnaireService } from 'src/questionnaire/questionnaire.service';
 
 @Controller('extraction')
 export class ExtractionController {
-  constructor(private imagesService: ImagesService, private userService: UserService, private questionnaireService: QuestionnaireService) {}
+  constructor(private imagesService: ImagesService, private userService: UserService) {}
   
   @Get('')
   async getImagesWithQuestionnaires() {

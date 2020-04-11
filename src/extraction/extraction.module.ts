@@ -7,7 +7,7 @@ import { QuestionnaireService } from 'src/questionnaire/questionnaire.service';
 
 @Module({
   imports: [QuestionnaireModule, ImagesModule],
-  providers: [ImagesService, QuestionnaireService],
+  providers: [],
   controllers: [QuestionnaireController],
   exports: [],
 })
