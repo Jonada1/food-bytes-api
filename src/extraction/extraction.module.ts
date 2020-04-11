@@ -5,9 +5,10 @@ import { QuestionnaireController } from 'src/questionnaire/questionnaire.control
 import { QuestionnaireModule } from 'src/questionnaire/questionnaire.module';
 import { QuestionnaireService } from 'src/questionnaire/questionnaire.service';
 import { ExtractionController } from './extraction.controller';
+import { UserModule } from 'src/user/user.module';
 
 @Module({
-  imports: [ImagesModule],
+  imports: [ImagesModule, UserModule],
   providers: [],
   controllers: [ExtractionController],
   exports: [],
