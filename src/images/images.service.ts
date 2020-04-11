@@ -7,6 +7,17 @@ import { Image } from './interfaces/image.interface';
 import { ColorsService } from '../colors/colors.service';
 import Vibrant = require('node-vibrant');
 import { QuestionnaireService } from '../questionnaire/questionnaire.service';
+
+export function toGetImageDto(image: Image): GetImageDto {
+  return {
+    id: image._id,
+    text: image.text,
+    url: image.url,
+    colors: image.colors,
+    date: image.date,
+  };
+}
+
 @Injectable()
 export class ImagesService {
   constructor(
@@ -136,12 +147,3 @@ export class ImagesService {
   }
 }
 
-export function toGetImageDto(image: Image): GetImageDto {
-  return {
-    id: image._id,
-    text: image.text,
-    url: image.url,
-    colors: image.colors,
-    date: image.date,
-  };
-}
