@@ -12,6 +12,7 @@ export class ExtractionController {
     const users = this.userService.getAll();
     const usersTotal: {[key: string]: {questionnaires: any[]; meals: any[]}} = {};
     await (await users).forEach(async user => {
+      usersTotal[user.id] = {questionnaires: [], meals: []};
       usersTotal[user.id].questionnaires = await this.imagesService.getImagesWithQuestionnaires(user.id);
       usersTotal[user.id].meals = await this.imagesService.getMealsPerDay(user.id);
     });
