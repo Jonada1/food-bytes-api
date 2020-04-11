@@ -8,6 +8,7 @@ import { ImagesModule } from './images/images.module';
 import { UserModule } from './user/user.module';
 import { ColorsModule } from './colors/colors.module';
 import { QuestionnaireModule } from './questionnaire/questionnaire.module';
+import { ExtractionModule } from './extraction/extraction.module';
 @Module({
   imports: [
     AuthModule,
@@ -16,6 +17,7 @@ import { QuestionnaireModule } from './questionnaire/questionnaire.module';
     ImagesModule,
     ColorsModule,
     QuestionnaireModule,
+    ExtractionModule,
   ],
   controllers: [AppController],
   providers: [AppService],
