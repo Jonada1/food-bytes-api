@@ -9,13 +9,13 @@ export class ExtractionController {
   
   @Get('')
   async getImagesWithQuestionnaires() {
-    const users = this.userService.getAll();
+    const users = await this.userService.getAll();
     const usersTotal: {[key: string]: {questionnaires: any[]; meals: any[]}} = {};
-    await (await users).forEach(async user => {
+    for(const user of users) {
       usersTotal[user.id] = {questionnaires: [], meals: []};
       usersTotal[user.id].questionnaires = await this.imagesService.getImagesWithQuestionnaires(user.id);
       usersTotal[user.id].meals = await this.imagesService.getMealsPerDay(user.id);
-    });
+    };
     return usersTotal;
   }
 }
